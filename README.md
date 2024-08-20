@@ -9,3 +9,7 @@
     + Line 13: Add Padding x-axis to the header for more space
     + Line 24: Add extra gap-x value to the general nav for more space
     + Line 53 - 58: Adjust the way Login and Signup options separated
+
+***Additional Change Suggestion***
+- Change the border radius of the Search bar
+- Fix the font of the text, much inconsistent happening around some sections
