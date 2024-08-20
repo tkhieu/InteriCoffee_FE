@@ -7,7 +7,10 @@ import Link from "next/link";
 
 const HeaderBar = () => {
   return (
-    <div className="flex flex-row gap-2 items-center justify-between">
+    //Commiter: Khang Thuận
+    //Date: 20/08/2024
+    //Change 2: Add Padding x-axis to the header for more space
+    <div className="flex flex-row gap-2 items-center justify-between px-10">
       <Link href="/">
         <Image
           src={Images.headerLogo}
@@ -17,7 +20,8 @@ const HeaderBar = () => {
           className=""
         />
       </Link>
-      <div className="flex flex-row gap-4 items-center">
+      {/* Change 3: Add extra gap value to the general nav for more space */}
+      <div className="flex flex-row gap-8 items-center">
         <Link
           href="/products"
           className="flex text-center text-lg font-outfit font-bold leading-[3.78rem] text-white"
@@ -45,9 +49,11 @@ const HeaderBar = () => {
         </Link>
         
       </div>
-      <div className="flex flex-row">
-          <Link href="/login" className="text-lg font-outfit font-bold leading-[3.78rem] text-white">Login /</Link>
-          <Link href="/signup" className="text-lg font-outfit font-bold leading-[3.78rem] text-white">Signup</Link>
+      {/* Change 4: Adjust the way Login and Signup options separated */}
+      <div className="flex flex-row justify-between items-center gap-2">
+          <Link href="/login" className="text-lg font-outfit font-bold leading-[3.78rem] text-white">Login </Link>
+          <span className="text-white">/</span>
+          <Link href="/signup" className="text-lg font-outfit font-bold leading-[3.78rem] text-white"> Signup</Link>
         </div>
     </div>
   );
