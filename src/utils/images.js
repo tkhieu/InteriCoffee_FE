@@ -13,6 +13,9 @@ import searchIcon from "../../public/images/search_icon.svg";
 import ratedStarIcon from "../../public/images/rated_star_icon.svg";
 import unratedStarIcon from "../../public/images/unrated_star_icon.svg";
 import halfRatedStarIcon from "../../public/images/half_rated_star_icon.svg";
+import filterBarIcon from "../../public/images/filter_bar_icon.svg";
+import collapsiblePlusIcon from "../../public/images/collapsible_plus_icon.svg";
+import collapsibleMinusIcon from "../../public/images/collapsible_minus_icon.svg";
 
 export const Images = {
     headerLogo,
@@ -30,4 +33,7 @@ export const Images = {
     ratedStarIcon,
     unratedStarIcon,
     halfRatedStarIcon,
+    filterBarIcon,
+    collapsiblePlusIcon,
+    collapsibleMinusIcon,
 }

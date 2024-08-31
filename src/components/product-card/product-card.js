@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { products } from "@/utils/product-card-dummy";
 import RatingSection from "@/components/rating/rating-section";
 
-const ProductCard = ({ imageUrl, name, price, rating, isSale }) => {
+export const ProductCard = ({ imageUrl, name, price, rating, isSale }) => {
   return (
     <div className="flex flex-col rounded-lg overflow-hidden text-center p-2">
       <Image
