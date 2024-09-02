@@ -1,5 +1,7 @@
-**Testing Area**
+# Login Feature
 
-Welcome to Testing Area, where every functions and features will be put to the test right here
+User will be able to login using either their email or phone number, along with password. In addittion, user can login with Google as an alternative
 
-Please proceed as instructed for testing your features and update them accordingly to the leader's instruction
+## Update Log
+
+02/09/2024: Finish the Traditional Login UI (for both Email and Phone Number)
