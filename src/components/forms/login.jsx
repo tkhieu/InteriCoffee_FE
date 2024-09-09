@@ -26,8 +26,6 @@ import {
   EyeOffIcon,
   PhoneIcon,
   MailIcon,
-  FacebookIcon,
-  InstagramIcon,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -93,7 +91,7 @@ export default function LoginForm() {
                 <TabsTrigger value="phone">Phone</TabsTrigger>
               </TabsList>
               <TabsContent value="email">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Input
@@ -180,40 +178,45 @@ export default function LoginForm() {
                 Forgot password?
               </Button>
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <ReCAPTCHA />
-            </div>
+            </div> */}
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col items-center space-y-2">
-        <Button className="w-full">Sign in</Button>
+        <Button className="w-full bg-[#B88D6F] hover:bg-[#8C6245]">Sign in</Button>
         <div className="mt-6 w-full">
           <Separator className="my-4" />
           <div className="space-y-2 ">
             <h4 className="text-sm font-medium text-center">
               Or continue with
             </h4>
-            <Button variant="outline" className="w-full">
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5 mr-2"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"
-                />
-              </svg>
-              Google
-            </Button>
+            <div className="flex justify-around items-center">
+              <Button variant="outline" className="w-fit gap-4 hover:bg-[#B69B76] hover:text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 mr-2"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"
+                  />
+                </svg>
+                Google
+              </Button>
+              <Link href={'/login-fast'}>
+                <Button variant="outline" className="w-fit gap-4 hover:bg-[#B69B76] hover:text-white">OTP Method</Button>
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="flex justify-center gap-4 pt-6">
+        <div className="flex justify-center gap-4">
           <p>Are you new here?</p>
           <Link
             href={"/signup"}
-            className="text-gray-400 hover:underline hover:font-semibold"
+            className="text-gray-400 hover:underline hover:text-gray-500 font-semibold"
           >
             Sign up now!
           </Link>
