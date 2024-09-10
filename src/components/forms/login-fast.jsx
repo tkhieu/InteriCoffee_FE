@@ -251,7 +251,7 @@ export default function LoginForm() {
           <div className="flex justify-center gap-4 pt-6">
             <p>Are you new here?</p>
             <Link
-              href={"/signup"}
+              href={"/sign-up"}
               className="text-gray-400 hover:underline hover:font-semibold"
             >
               Sign up now!

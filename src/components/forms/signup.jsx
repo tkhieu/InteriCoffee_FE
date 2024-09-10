@@ -28,6 +28,7 @@ import {
   MailIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Placeholder for reCAPTCHA
 const ReCAPTCHA = () => (
@@ -46,11 +47,13 @@ const countries = [
   // Add more countries as needed
 ];
 
-export default function LoginForm() {
+export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loginMethod, setLoginMethod] = useState("email");
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const router = useRouter();
 
   const formatPhoneNumber = (value) => {
     // Remove all non-digit characters
@@ -74,12 +77,19 @@ export default function LoginForm() {
     setPhoneNumber(formattedNumber);
   };
 
+  const handleSubmit = () => {
+    //handle submit
+    
+    //routing to setup
+    router.push('/sign-up/setup');
+  }
+
   return (
     <Card className="w-[420px] mx-auto">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Sign up</CardTitle>
         <CardDescription>
-          Welcome back! Please login to continue
+          Welcome newcomers, please create an account to continue
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -147,7 +157,8 @@ export default function LoginForm() {
                 </div>
               </TabsContent>
             </Tabs>
-            <div className="space-y-1">
+            {/* Password */}
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative w-full">
                 <Input
@@ -172,9 +183,30 @@ export default function LoginForm() {
                   </span>
                 </Button>
               </div>
-              <div className="flex justify-end">
-                <Button variant="link" className="px-0 text-sm">
-                  Forgot password?
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Confirm Password</Label>
+              <div className="relative w-full">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1 h-8 w-8 p-0"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className="h-4 w-4 text-gray-400" />
+                  ) : (
+                    <EyeIcon className="h-4 w-4 text-gray-400" />
+                  )}
+                  <span className="sr-only">
+                    {showPassword ? "Hide password" : "Show password"}
+                  </span>
                 </Button>
               </div>
             </div>
@@ -185,7 +217,7 @@ export default function LoginForm() {
         </form>
       </CardContent>
       <CardFooter className="flex flex-col items-center space-y-2">
-        <Button className="w-full bg-[#B88D6F] hover:bg-[#8C6245]">Sign in</Button>
+        <Button className="w-full bg-[#B88D6F] hover:bg-[#8C6245]" onClick={handleSubmit}>Sign up</Button>
         <div className="mt-6 w-full">
           <Separator className="my-4" />
           <div className="space-y-2 ">
@@ -206,19 +238,16 @@ export default function LoginForm() {
                 </svg>
                 Google
               </Button>
-              <Link href={'/login-fast'}>
-                <Button variant="outline" className="w-fit gap-4 hover:bg-[#B69B76] hover:text-white">OTP Method</Button>
-              </Link>
             </div>
           </div>
         </div>
         <div className="flex justify-center gap-4">
-          <p>Are you new here?</p>
+          <p>Already have an account?</p>
           <Link
-            href={"/sign-up"}
+            href={"/login"}
             className="text-gray-400 hover:underline hover:text-gray-500 font-semibold"
           >
-            Sign up now!
+            Login now!
           </Link>
         </div>
       </CardFooter>
