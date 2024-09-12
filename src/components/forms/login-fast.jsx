@@ -140,7 +140,7 @@ export default function LoginForm() {
   };
 
   return (
-    <>
+    <div className="flex justify-center items-center h-screen">
       <Card className="w-[420px] mx-auto">
         <CardHeader>
           <CardTitle>Login</CardTitle>
@@ -265,6 +265,6 @@ export default function LoginForm() {
         onSubmit={handleOTPSubmit}
         loginMethod={loginMethod}
       />
-    </>
+    </div>
   );
 }
