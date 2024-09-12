@@ -2,16 +2,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
-import { CalendarIcon } from "lucide-react"
-import { useState } from "react"
-import { format } from "date-fns"
 
 export default function FirstStep() {
-  const [date, setDate] = useState()
-
   return (
     <div className="flex justify-center items-center h-screen">
       <form className="space-y-8 max-w-5xl mx-auto p-6 bg-card rounded-lg shadow-lg">
