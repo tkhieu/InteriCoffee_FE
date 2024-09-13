@@ -61,7 +61,7 @@ export default function PreferenceForm() {
                       <Badge 
                         key={tag} 
                         variant={selectedTags.includes(tag) ? "default" : "outline"}
-                        className="cursor-pointer"
+                        className="cursor-pointer hover:bg-[#8C6245] hover:text-white"
                         onClick={() => handleTagClick(tag)}
                       >
                         {tag}
@@ -77,7 +77,7 @@ export default function PreferenceForm() {
                         <Badge 
                           key={tag} 
                           variant={selectedTags.includes(tag) ? "default" : "outline"}
-                          className="cursor-pointer"
+                          className="cursor-pointer hover:bg-[#91744D] hover:text-white"
                           onClick={() => handleRelatedTagClick(tag)}
                         >
                           {tag}
@@ -90,7 +90,7 @@ export default function PreferenceForm() {
             </form>
           </CardContent>
           <CardFooter className='flex justify-center items-center gap-10'>
-                <Button type="submit" onClick={handleSubmit} className="w-full">
+                <Button type="submit" onClick={handleSubmit} className="w-full bg-[#B88D6F] hover:bg-[#8C6245]">
                   Save Preferences
                 </Button>
                 <Button type="submit" variant="outline" onClick={handleSubmit} className="w-full">

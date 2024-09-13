@@ -173,13 +173,13 @@ export default function LoginForm() {
                     </span>
                   </Button>
                 </div>
-                  <div className="flex justify-end items-center">
-                    <Button variant="link" className="px-0 text-sm">
-                      <Link href={"forgot-password"}>
-                        Forgot password?
-                      </Link>
-                    </Button>
-                  </div>
+                <div className="flex justify-end items-center">
+                  <Button variant="link" className="px-0 text-sm">
+                    <Link href={"forgot-password"}>
+                      Forgot password?
+                    </Link>
+                  </Button>
+                </div>
               </div>
               {/* <div className="space-y-2">
                 <ReCAPTCHA />
