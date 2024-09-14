@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useRef, useCallback, Suspense } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Box, Plane, TransformControls, PerspectiveCamera } from '@react-three/drei'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { Undo2, Redo2, Trash2, Plus } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Undo2, Redo2, Trash2, Plus, MoreVertical } from 'lucide-react'
 import * as THREE from 'three'
 
 const furnitureTypes = [
@@ -17,7 +18,7 @@ const furnitureTypes = [
   { name: 'Bed', width: 2, height: 0.5, depth: 1.8, color: '#F4A460', image: '/placeholder.svg?height=100&width=100' },
 ]
 
-const Furniture = ({ position, size, color, onSelect, isSelected, onPositionChange }) => {
+const Furniture = ({ position, size, color, onSelect, isSelected, onPositionChange, onSizeChange }) => {
   const mesh = useRef()
   const [hovered, setHovered] = useState(false)
 
@@ -26,6 +27,12 @@ const Furniture = ({ position, size, color, onSelect, isSelected, onPositionChan
       onPositionChange(event.target.object.position)
     }
   }, [onPositionChange])
+
+  useFrame(() => {
+    if (isSelected && mesh.current) {
+      onPositionChange(mesh.current.position)
+    }
+  })
 
   return (
     <group>
@@ -55,12 +62,25 @@ const Furniture = ({ position, size, color, onSelect, isSelected, onPositionChan
   )
 }
 
-const Room = ({ furniture, onSelectFurniture, selectedFurniture, onUpdateFurniture }) => {
+const Room = ({ furniture, onSelectFurniture, selectedFurniture, onUpdateFurniture, onSizeChange }) => {
   const handleCanvasClick = (event) => {
     if (event.object.name !== 'dragPlane') {
       onSelectFurniture(null)
     }
   }
+
+  const handleWheel = (event) => {
+    if (event.ctrlKey && selectedFurniture !== null) {
+      event.preventDefault()
+      const delta = event.deltaY * -0.01
+      onSizeChange(selectedFurniture, delta)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [selectedFurniture, onSizeChange])
 
   return (
     <group onClick={handleCanvasClick}>
@@ -86,6 +106,7 @@ const Room = ({ furniture, onSelectFurniture, selectedFurniture, onUpdateFurnitu
           onSelect={() => onSelectFurniture(index)}
           isSelected={selectedFurniture === index}
           onPositionChange={(newPosition) => onUpdateFurniture(index, { position: [newPosition.x, newPosition.y, newPosition.z] })}
+          onSizeChange={(delta) => onSizeChange(index, delta)}
         />
       ))}
     </group>
@@ -167,6 +188,25 @@ export default function RoomPlanner() {
   const [history, setHistory] = useState([[]])
   const [historyIndex, setHistoryIndex] = useState(0)
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      addToHistory(furniture)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [furniture])
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Delete' && selectedFurniture !== null) {
+        handleDeleteFurniture(selectedFurniture)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedFurniture])
+
   const handleDrop = useCallback((position) => {
     if (isDragging && selectedType) {
       handleAddFurniture(position)
@@ -175,8 +215,17 @@ export default function RoomPlanner() {
 
   const handleAddFurniture = (position = { x: 0, y: 0, z: 0 }) => {
     if (selectedType) {
+      const existingNames = furniture.filter(item => item.name.startsWith(selectedType.name)).map(item => item.name)
+      let newName = selectedType.name
+      let counter = 1
+      while (existingNames.includes(newName)) {
+        newName = `${selectedType.name} ${counter}`
+        counter++
+      }
+
       const newFurniture = {
         ...selectedType,
+        name: newName,
         position: [position.x, selectedType.height / 2 + position.y, position.z],
       }
       const newFurnitureList = [...furniture, newFurniture]
@@ -195,7 +244,25 @@ export default function RoomPlanner() {
   const handleUpdateFurniture = (index, updates) => {
     const updatedFurniture = furniture.map((item, i) => i === index ? { ...item, ...updates } : item)
     setFurniture(updatedFurniture)
-    addToHistory(updatedFurniture)
+  }
+
+  const handleSizeChange = (index, delta) => {
+    const updatedFurniture = furniture.map((item, i) => {
+      if (i === index) {
+        const newWidth = Math.max(0.1, item.width + delta)
+        const newHeight = Math.max(0.1, item.height + delta)
+        const newDepth = Math.max(0.1, item.depth + delta)
+        return {
+          ...item,
+          width: newWidth,
+          height: newHeight,
+          depth: newDepth,
+          size: [newWidth, newHeight, newDepth]
+        }
+      }
+      return item
+    })
+    setFurniture(updatedFurniture)
   }
 
   const addToHistory = (newState) => {
@@ -223,6 +290,13 @@ export default function RoomPlanner() {
     const emptyState = []
     setFurniture(emptyState)
     addToHistory(emptyState)
+  }
+
+  const handleDeleteFurniture = (index) => {
+    const newFurniture = furniture.filter((_, i) => i !== index)
+    setFurniture(newFurniture)
+    addToHistory(newFurniture)
+    setSelectedFurniture(null)
   }
 
   return (
@@ -277,10 +351,18 @@ export default function RoomPlanner() {
               {furniture.map((item, index) => (
                 <li 
                   key={index} 
-                  className={`cursor-pointer ${selectedFurniture === index ? 'text-blue-500' : ''}`}
+                  className={`cursor-pointer flex justify-between items-center ${selectedFurniture === index ? 'text-blue-500' : ''}`}
                   onClick={() => handleSelectFurniture(index)}
                 >
-                  {item.name}
+                  <span>{item.name}</span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm"><MoreVertical className="h-4 w-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onSelect={() => handleDeleteFurniture(index)}>Delete</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </li>
               ))}
             </ul>
@@ -288,18 +370,17 @@ export default function RoomPlanner() {
         </div>
         <div className="w-1/2">
           <Canvas shadows camera={{ position: [5, 5, 5], fov: 75 }}>
-            <Suspense fallback={null}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} castShadow />
-              <Room 
-                furniture={furniture} 
-                onSelectFurniture={handleSelectFurniture}
-                selectedFurniture={selectedFurniture}
-                onUpdateFurniture={handleUpdateFurniture}
-              />
-              <DragPlane onDrop={handleDrop} />
-              <OrbitControls makeDefault />
-            </Suspense>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} castShadow />
+            <Room 
+              furniture={furniture} 
+              onSelectFurniture={handleSelectFurniture}
+              selectedFurniture={selectedFurniture}
+              onUpdateFurniture={handleUpdateFurniture}
+              onSizeChange={handleSizeChange}
+            />
+            <DragPlane onDrop={handleDrop} />
+            <OrbitControls makeDefault />
           </Canvas>
         </div>
         <div className="w-1/4 p-4 bg-gray-100 overflow-y-auto">
